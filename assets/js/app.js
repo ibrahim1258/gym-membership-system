@@ -1,5 +1,5 @@
 const SUPABASE_URL = "https://huauixixvnciuiacayqo.supabase.co";
-const SUPABASE_KEY = "sb_publishable_a3Im8iLcms_hIxFivczFog_ap1rYTPu";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh1YXVpeGl4dm5jaXVpYWNheXFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNDUyODksImV4cCI6MjA4ODYyMTI4OX0.Hzii8M3UEi1PSakEOjOFanJY9aYH8Plmt0J6TNJWxmM";
 const ADMIN = { username: "admin", password: "gym123", name: "Admin" };
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -554,4 +554,5 @@ async function init() {
 }
 
 init();
+
 
