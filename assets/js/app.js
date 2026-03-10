@@ -1,4 +1,4 @@
-const SUPABASE_URL = "https://huauiixvnciuiacayqo.supabase.co";
+const SUPABASE_URL = "https://huauixixvnciuiacayqo.supabase.co";
 const SUPABASE_KEY = "sb_publishable_a3Im8iLcms_hIxFivczFog_ap1rYTPu";
 const ADMIN = { username: "admin", password: "gym123", name: "Admin" };
 
@@ -554,3 +554,4 @@ async function init() {
 }
 
 init();
+
