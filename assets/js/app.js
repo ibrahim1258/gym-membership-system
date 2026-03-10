@@ -1,4 +1,4 @@
-const SUPABASE_URL = "https://huauixixvnciuiacayqo.supabase.co";
+﻿const SUPABASE_URL = "https://huauixixvnciuiacayqo.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh1YXVpeGl4dm5jaXVpYWNheXFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNDUyODksImV4cCI6MjA4ODYyMTI4OX0.Hzii8M3UEi1PSakEOjOFanJY9aYH8Plmt0J6TNJWxmM";
 const ADMIN = { username: "admin", password: "gym123", name: "Admin" };
 
@@ -49,7 +49,7 @@ function addMonths(dateValue, months) {
 }
 
 function formatDate(value) {
-  return new Intl.DateTimeFormat("en-GB", {
+  return new Intl.DateTimeFormat("ar-EG", {
     day: "2-digit",
     month: "short",
     year: "numeric"
@@ -91,8 +91,8 @@ function resetMemberForm() {
   document.getElementById("member-id").value = "";
   startInput.value = new Date().toISOString().split("T")[0];
   document.getElementById("member-duration").value = "1";
-  memberFormTitle.textContent = "Add New Member";
-  memberSubmit.textContent = "Save Member";
+  memberFormTitle.textContent = "????? ??? ????";
+  memberSubmit.textContent = "??? ?????";
   cancelEditButton.classList.add("hidden");
 }
 
@@ -242,14 +242,14 @@ async function renderAdminOverview() {
 async function renderMembers() {
   const users = await getAllUsers();
   if (!users.length) {
-    membersCollection.innerHTML = '<div class="empty">No members yet. Add your first member from the form above.</div>';
+    membersCollection.innerHTML = '<div class="empty">?? ???? ????? ???. ??? ??? ??? ?? ??????? ???????.</div>';
     return;
   }
 
   membersCollection.innerHTML = users.map((user) => {
     const sub = getSubscription(user);
     const badgeClass = sub.active ? "badge ok" : "badge expired";
-    const badgeText = sub.active ? `${sub.remainingDays} days left` : "Expired";
+    const badgeText = sub.active ? `${sub.remainingDays} ??? ?????` : "?????";
     return `
       <article class="item">
         <div class="item-head">
@@ -259,13 +259,13 @@ async function renderMembers() {
           </div>
           <span class="${badgeClass}">${badgeText}</span>
         </div>
-        <p>Email: ${user.email}</p>
-        <p>Start Date: ${formatDate(sub.startDate)}</p>
-        <p>End Date: ${formatDate(sub.endDate)}</p>
-        <p>Password: ${user.password}</p>
+        <p>?????? ??????????: ${user.email}</p>
+        <p>????? ???????: ${formatDate(sub.startDate)}</p>
+        <p>????? ???????: ${formatDate(sub.endDate)}</p>
+        <p>???? ??????: ${user.password}</p>
         <div class="actions">
-          <button class="secondary" type="button" onclick="editMember('${user.id}')">Edit</button>
-          <button class="danger" type="button" onclick="deleteMember('${user.id}')">Delete</button>
+          <button class="secondary" type="button" onclick="editMember('${user.id}')">?????</button>
+          <button class="danger" type="button" onclick="deleteMember('${user.id}')">???</button>
         </div>
       </article>
     `;
@@ -275,7 +275,7 @@ async function renderMembers() {
 async function renderSuggestions() {
   const [users, suggestions] = await Promise.all([getAllUsers(), getAllSuggestions()]);
   if (!suggestions.length) {
-    adminSuggestions.innerHTML = '<div class="empty">No suggestions yet.</div>';
+    adminSuggestions.innerHTML = '<div class="empty">?? ???? ???????? ??? ????.</div>';
     return;
   }
 
@@ -285,10 +285,10 @@ async function renderSuggestions() {
     return `
       <article class="suggestion-item">
         <div class="item-head">
-          <strong>${user ? user.name : "Unknown User"}</strong>
-          <span class="badge">${new Date(item.date).toLocaleString("en-GB")}</span>
+          <strong>${user ? user.name : "??? ??? ?????"}</strong>
+          <span class="badge">${new Date(item.date).toLocaleString("ar-EG")}</span>
         </div>
-        <p>@${user ? user.username : "unknown"}</p>
+        <p>@${user ? user.username : "??? ?????"}</p>
         <p>${item.suggestion}</p>
       </article>
     `;
@@ -308,12 +308,12 @@ async function renderMemberDashboard() {
 
   state.currentUser = current;
   const sub = getSubscription(current);
-  document.getElementById("member-welcome-title").textContent = `Welcome, ${current.name}`;
+  document.getElementById("member-welcome-title").textContent = `??????? ${current.name}`;
   document.getElementById("member-start-date").textContent = formatDate(sub.startDate);
   document.getElementById("member-end-date").textContent = formatDate(sub.endDate);
-  document.getElementById("member-remaining-days").textContent = `${sub.remainingDays} days`;
+  document.getElementById("member-remaining-days").textContent = `${sub.remainingDays} ???`;
   const badge = document.getElementById("member-status-badge");
-  badge.textContent = sub.active ? "Active" : "Expired";
+  badge.textContent = sub.active ? "???" : "?????";
   badge.className = sub.active ? "badge ok" : "badge expired";
 }
 
@@ -338,13 +338,13 @@ window.editMember = async function editMember(id) {
     document.getElementById("member-password").value = user.password;
     document.getElementById("member-start").value = user.start_date;
     document.getElementById("member-duration").value = String(user.duration_months);
-    memberFormTitle.textContent = "Edit Member";
-    memberSubmit.textContent = "Update Member";
+    memberFormTitle.textContent = "????? ?????";
+    memberSubmit.textContent = "????? ?????";
     cancelEditButton.classList.remove("hidden");
     clearStatus(memberStatus);
     window.scrollTo({ top: 0, behavior: "smooth" });
   } catch (error) {
-    setStatus(memberStatus, error.message || "Could not load member.", "error");
+    setStatus(memberStatus, error.message || "???? ????? ?????? ?????.", "error");
   }
 };
 
@@ -355,18 +355,18 @@ window.deleteMember = async function deleteMember(id) {
       return;
     }
 
-    if (!window.confirm(`Delete ${user.name}?`)) {
+    if (!window.confirm(`?? ???? ??? ${user.name}?`)) {
       return;
     }
 
     await deleteMemberRecord(id);
-    setStatus(memberStatus, "Member deleted successfully.", "success");
+    setStatus(memberStatus, "?? ??? ????? ?????.", "success");
     await renderAll();
     if (state.currentUser && state.currentUser.id === id) {
       logout();
     }
   } catch (error) {
-    setStatus(memberStatus, error.message || "Could not delete member.", "error");
+    setStatus(memberStatus, error.message || "???? ??? ?????.", "error");
   }
 };
 
@@ -387,7 +387,7 @@ loginForm.addEventListener("submit", async (event) => {
 
     const member = await findUserByUsername(username);
     if (!member || member.password !== password) {
-      setStatus(loginStatus, "Invalid username or password.", "error");
+      setStatus(loginStatus, "??? ???????? ?? ???? ?????? ??? ?????.", "error");
       return;
     }
 
@@ -396,7 +396,7 @@ loginForm.addEventListener("submit", async (event) => {
     await renderMemberDashboard();
     suggestionForm.reset();
   } catch (error) {
-    setStatus(loginStatus, error.message || "Login failed.", "error");
+    setStatus(loginStatus, error.message || "??? ????? ??????.", "error");
   }
 });
 
@@ -411,7 +411,7 @@ memberForm.addEventListener("submit", async (event) => {
   try {
     const existing = await findUserByUsername(username);
     if (existing && existing.id !== id) {
-      setStatus(memberStatus, "This username is already used by another member.", "error");
+      setStatus(memberStatus, "??? ???????? ?????? ?????? ???? ???.", "error");
       return;
     }
 
@@ -429,11 +429,11 @@ memberForm.addEventListener("submit", async (event) => {
     };
 
     await saveMember(member);
-    setStatus(memberStatus, id ? "Member updated successfully." : "Member added successfully.", "success");
+    setStatus(memberStatus, id ? "?? ????? ????? ?????." : "??? ????? ????? ?????.", "success");
     resetMemberForm();
     await renderAll();
   } catch (error) {
-    setStatus(memberStatus, error.message || "Could not save member.", "error");
+    setStatus(memberStatus, error.message || "???? ??? ?????? ?????.", "error");
   }
 });
 
@@ -442,13 +442,13 @@ suggestionForm.addEventListener("submit", async (event) => {
   clearStatus(suggestionStatus);
 
   if (!state.currentUser || state.mode !== "member") {
-    setStatus(suggestionStatus, "Please log in as a member first.", "error");
+    setStatus(suggestionStatus, "??? ?????? ???? ?????.", "error");
     return;
   }
 
   const text = document.getElementById("suggestion-text").value.trim();
   if (!text) {
-    setStatus(suggestionStatus, "Please write a suggestion before sending.", "error");
+    setStatus(suggestionStatus, "???? ???????? ??? ???????.", "error");
     return;
   }
 
@@ -461,10 +461,10 @@ suggestionForm.addEventListener("submit", async (event) => {
     });
 
     suggestionForm.reset();
-    setStatus(suggestionStatus, "Suggestion sent successfully.", "success");
+    setStatus(suggestionStatus, "?? ????? ???????? ?????.", "success");
     await renderAll();
   } catch (error) {
-    setStatus(suggestionStatus, error.message || "Could not send suggestion.", "error");
+    setStatus(suggestionStatus, error.message || "???? ????? ????????.", "error");
   }
 });
 
@@ -486,12 +486,12 @@ exportBackupButton.addEventListener("click", async () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "gym-membership-backup.json";
+    link.download = "????-????????-?????.json";
     link.click();
     URL.revokeObjectURL(url);
-    setStatus(memberStatus, "Backup exported successfully.", "success");
+    setStatus(memberStatus, "?? ????? ?????? ?????????? ?????.", "success");
   } catch (error) {
-    setStatus(memberStatus, error.message || "Could not export backup.", "error");
+    setStatus(memberStatus, error.message || "???? ????? ?????? ??????????.", "error");
   }
 });
 
@@ -534,9 +534,9 @@ importBackupInput.addEventListener("change", async (event) => {
 
     resetMemberForm();
     await renderAll();
-    setStatus(memberStatus, "Backup imported successfully.", "success");
+    setStatus(memberStatus, "?? ??????? ?????? ?????????? ?????.", "success");
   } catch (error) {
-    setStatus(memberStatus, error.message || "Backup file is invalid.", "error");
+    setStatus(memberStatus, error.message || "??? ?????? ?????????? ??? ????.", "error");
   }
 
   importBackupInput.value = "";
@@ -549,10 +549,12 @@ async function init() {
   try {
     await renderAll();
   } catch (error) {
-    setStatus(loginStatus, error.message || "Database connection failed.", "error");
+    setStatus(loginStatus, error.message || "??? ??????? ?????? ????????.", "error");
   }
 }
 
 init();
+
+
 
 

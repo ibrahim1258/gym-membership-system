@@ -1,44 +1,44 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gym Membership System</title>
+  <title>نظام اشتراكات الجيم</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
   <main class="app-shell">
     <section class="hero">
-      <div class="brand">Pro Gym Club</div>
+      <div class="brand">PRO GYM CLUB</div>
       <div class="hero-grid">
         <div>
-          <h1>Gym Membership System</h1>
+          <h1>نظام اشتراكات الجيم</h1>
           <p>
-            Login for members and admin, manage subscriptions, monitor remaining days,
-            and collect gym suggestions in one strong dashboard.
+            تسجيل دخول للأدمن والأعضاء، وإدارة الاشتراكات، ومعرفة الأيام المتبقية،
+            واستقبال اقتراحات الأعضاء في لوحة واحدة.
           </p>
         </div>
 
         <div id="login-view" class="panel">
           <div class="section-head">
             <div>
-              <h2>Login</h2>
-              <p>Use the credentials created by the admin.</p>
+              <h2>تسجيل الدخول</h2>
+              <p>استخدم بيانات الدخول التي أنشأها الأدمن.</p>
             </div>
           </div>
 
           <form id="login-form">
             <label>
-              Username
-              <input id="login-username" type="text" placeholder="Enter username" required />
+              اسم المستخدم
+              <input id="login-username" type="text" placeholder="أدخل اسم المستخدم" required />
             </label>
 
             <label>
-              Password
-              <input id="login-password" type="password" placeholder="Enter password" required />
+              كلمة المرور
+              <input id="login-password" type="password" placeholder="أدخل كلمة المرور" required />
             </label>
 
-            <button class="primary" type="submit">Login</button>
+            <button class="primary" type="submit">دخول</button>
           </form>
 
           <div id="login-status" class="status" aria-live="polite"></div>
@@ -49,19 +49,19 @@
     <section id="admin-dashboard" class="dashboard">
       <div class="overview-grid">
         <article class="stat-card">
-          <h3>Total Members</h3>
+          <h3>إجمالي الأعضاء</h3>
           <strong id="total-members">0</strong>
         </article>
         <article class="stat-card">
-          <h3>Active Subscriptions</h3>
+          <h3>الاشتراكات النشطة</h3>
           <strong id="active-members">0</strong>
         </article>
         <article class="stat-card">
-          <h3>Expired</h3>
+          <h3>المنتهية</h3>
           <strong id="expired-members">0</strong>
         </article>
         <article class="stat-card">
-          <h3>Suggestions</h3>
+          <h3>الاقتراحات</h3>
           <strong id="total-suggestions">0</strong>
         </article>
       </div>
@@ -69,16 +69,16 @@
       <div class="panel" style="margin-bottom: 22px;">
         <div class="row-between">
           <div>
-            <h2>Admin Panel</h2>
-            <p class="subtle">Create, edit, delete members and monitor all suggestions.</p>
+            <h2>لوحة الأدمن</h2>
+            <p class="subtle">إضافة وتعديل وحذف الأعضاء ومتابعة كل الاقتراحات.</p>
           </div>
           <div class="actions">
-            <button id="export-backup" class="ghost" type="button">Export Backup</button>
+            <button id="export-backup" class="ghost" type="button">تصدير نسخة احتياطية</button>
             <label class="ghost" style="cursor:pointer; display:inline-flex; align-items:center; justify-content:center; min-width: 140px;">
-              Import Backup
+              استيراد نسخة احتياطية
               <input id="import-backup" type="file" accept="application/json" class="hidden" />
             </label>
-            <button id="admin-logout" class="secondary" type="button">Logout</button>
+            <button id="admin-logout" class="secondary" type="button">تسجيل الخروج</button>
           </div>
         </div>
       </div>
@@ -87,51 +87,51 @@
         <div class="surface">
           <div class="section-head">
             <div>
-              <h3 id="member-form-title">Add New Member</h3>
-              <p>Create login credentials and subscription dates for the member.</p>
+              <h3 id="member-form-title">إضافة عضو جديد</h3>
+              <p>أنشئ بيانات الدخول وتواريخ الاشتراك للعضو.</p>
             </div>
-            <button id="cancel-edit" class="ghost hidden" type="button">Cancel Edit</button>
+            <button id="cancel-edit" class="ghost hidden" type="button">إلغاء التعديل</button>
           </div>
 
           <form id="member-form">
             <input id="member-id" type="hidden" />
             <div class="form-grid">
               <label>
-                Member Name
-                <input id="member-name" type="text" placeholder="e.g. Ibrahim Adel" required />
+                اسم العضو
+                <input id="member-name" type="text" placeholder="مثال: إبراهيم عادل" required />
               </label>
 
               <label>
-                Email
-                <input id="member-email" type="email" placeholder="e.g. member@example.com" required />
+                البريد الإلكتروني
+                <input id="member-email" type="email" placeholder="مثال: member@example.com" required />
               </label>
 
               <label>
-                Username
-                <input id="member-username" type="text" placeholder="e.g. ibrahim01" required />
+                اسم المستخدم
+                <input id="member-username" type="text" placeholder="مثال: ibrahim01" required />
               </label>
 
               <label>
-                Password
-                <input id="member-password" type="text" placeholder="Create password" required />
+                كلمة المرور
+                <input id="member-password" type="text" placeholder="أنشئ كلمة مرور" required />
               </label>
 
               <label>
-                Start Date
+                تاريخ البداية
                 <input id="member-start" type="date" required />
               </label>
 
               <label>
-                Duration
+                المدة
                 <select id="member-duration" required>
-                  <option value="1">1 Month</option>
-                  <option value="3">3 Months</option>
-                  <option value="12">1 Year</option>
+                  <option value="1">شهر واحد</option>
+                  <option value="3">3 شهور</option>
+                  <option value="12">سنة واحدة</option>
                 </select>
               </label>
             </div>
 
-            <button id="member-submit" class="primary" type="submit">Save Member</button>
+            <button id="member-submit" class="primary" type="submit">حفظ العضو</button>
           </form>
 
           <div id="member-status" class="status" aria-live="polite"></div>
@@ -140,8 +140,8 @@
         <div class="surface">
           <div class="section-head">
             <div>
-              <h3>Suggestions</h3>
-              <p>Members messages appear here for the admin.</p>
+              <h3>الاقتراحات</h3>
+              <p>رسائل الأعضاء تظهر هنا للأدمن.</p>
             </div>
           </div>
           <div id="admin-suggestions" class="suggestions"></div>
@@ -151,8 +151,8 @@
       <div class="surface" style="margin-top: 22px;">
         <div class="section-head">
           <div>
-            <h3>Members List</h3>
-            <p>All registered members with edit and delete actions.</p>
+            <h3>قائمة الأعضاء</h3>
+            <p>كل الأعضاء المسجلين مع خيارات التعديل والحذف.</p>
           </div>
         </div>
         <div id="members-collection" class="collection"></div>
@@ -163,45 +163,45 @@
       <div class="surface member-welcome">
         <div class="row-between">
           <div>
-            <div class="pill">Member Area</div>
-            <h2 id="member-welcome-title">Welcome, Member</h2>
+            <div class="pill">منطقة العضو</div>
+            <h2 id="member-welcome-title">مرحبًا، عضو الجيم</h2>
           </div>
-          <button id="member-logout" class="secondary" type="button">Logout</button>
+          <button id="member-logout" class="secondary" type="button">تسجيل الخروج</button>
         </div>
-        <p class="subtle">Track your plan details and send suggestions to the gym admin.</p>
+        <p class="subtle">تابع تفاصيل اشتراكك وأرسل اقتراحاتك لإدارة الجيم.</p>
       </div>
 
       <div class="dashboard-grid">
         <div class="surface">
           <div class="section-head">
             <div>
-              <h3>Subscription Status</h3>
-              <p>Your current membership details.</p>
+              <h3>حالة الاشتراك</h3>
+              <p>تفاصيل اشتراكك الحالية.</p>
             </div>
           </div>
 
           <div class="info-lines">
-            <div class="row-between"><span>Start Date</span><strong id="member-start-date">-</strong></div>
-            <div class="row-between"><span>End Date</span><strong id="member-end-date">-</strong></div>
-            <div class="row-between"><span>Remaining Days</span><strong id="member-remaining-days">-</strong></div>
-            <div class="row-between"><span>Status</span><span id="member-status-badge" class="badge">-</span></div>
+            <div class="row-between"><span>تاريخ البداية</span><strong id="member-start-date">-</strong></div>
+            <div class="row-between"><span>تاريخ النهاية</span><strong id="member-end-date">-</strong></div>
+            <div class="row-between"><span>الأيام المتبقية</span><strong id="member-remaining-days">-</strong></div>
+            <div class="row-between"><span>الحالة</span><span id="member-status-badge" class="badge">-</span></div>
           </div>
         </div>
 
         <div class="surface">
           <div class="section-head">
             <div>
-              <h3>Suggestion Box</h3>
-              <p>Write any idea, note, or request for the admin.</p>
+              <h3>صندوق الاقتراحات</h3>
+              <p>اكتب أي فكرة أو ملاحظة أو طلب لإدارة الجيم.</p>
             </div>
           </div>
 
           <form id="suggestion-form">
             <label>
-              Suggestion
-              <textarea id="suggestion-text" placeholder="Write your suggestion here..." required></textarea>
+              الاقتراح
+              <textarea id="suggestion-text" placeholder="اكتب اقتراحك هنا..." required></textarea>
             </label>
-            <button class="primary" type="submit">Send Suggestion</button>
+            <button class="primary" type="submit">إرسال الاقتراح</button>
           </form>
 
           <div id="suggestion-status" class="status" aria-live="polite"></div>
