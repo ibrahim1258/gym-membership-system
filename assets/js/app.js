@@ -74,6 +74,23 @@ function setStatus(node, message, type) {
   node.className = "status " + type;
 }
 
+function getFriendlyErrorMessage(error, fallbackMessage) {
+  const message = error && error.message ? String(error.message) : "";
+
+  if (message.includes("members_email_key")) {
+    return "هذا البريد الإلكتروني مسجل بالفعل لعضو آخر.";
+  }
+
+  if (message.includes("members_username_key")) {
+    return "اسم المستخدم مسجل بالفعل لعضو آخر.";
+  }
+
+  if (message.includes("Failed to fetch")) {
+    return "تعذر الاتصال بقاعدة البيانات. تأكد من الإنترنت وإعدادات Supabase.";
+  }
+
+  return fallbackMessage;
+}
 function clearStatus(node) {
   node.textContent = "";
   node.className = "status";
@@ -91,8 +108,8 @@ function resetMemberForm() {
   document.getElementById("member-id").value = "";
   startInput.value = new Date().toISOString().split("T")[0];
   document.getElementById("member-duration").value = "1";
-  memberFormTitle.textContent = "????? ??? ????";
-  memberSubmit.textContent = "??? ?????";
+  memberFormTitle.textContent = "إضافة عضو جديد";
+  memberSubmit.textContent = "حفظ العضو";
   cancelEditButton.classList.add("hidden");
 }
 
@@ -242,14 +259,14 @@ async function renderAdminOverview() {
 async function renderMembers() {
   const users = await getAllUsers();
   if (!users.length) {
-    membersCollection.innerHTML = '<div class="empty">?? ???? ????? ???. ??? ??? ??? ?? ??????? ???????.</div>';
+    membersCollection.innerHTML = '<div class="empty">لا يوجد أعضاء حالياً. قم بإضافة عضو من نموذج إضافة الأعضاء.</div>';
     return;
   }
 
   membersCollection.innerHTML = users.map((user) => {
     const sub = getSubscription(user);
     const badgeClass = sub.active ? "badge ok" : "badge expired";
-    const badgeText = sub.active ? `${sub.remainingDays} ??? ?????` : "?????";
+    const badgeText = sub.active ? `${sub.remainingDays} يوم متبقي` : "منتهي";
     return `
       <article class="item">
         <div class="item-head">
@@ -259,13 +276,13 @@ async function renderMembers() {
           </div>
           <span class="${badgeClass}">${badgeText}</span>
         </div>
-        <p>?????? ??????????: ${user.email}</p>
-        <p>????? ???????: ${formatDate(sub.startDate)}</p>
-        <p>????? ???????: ${formatDate(sub.endDate)}</p>
-        <p>???? ??????: ${user.password}</p>
+        <p>البريد الإلكتروني: ${user.email}</p>
+        <p>بداية الاشتراك: ${formatDate(sub.startDate)}</p>
+        <p>نهاية الاشتراك: ${formatDate(sub.endDate)}</p>
+        <p>كلمة المرور: ${user.password}</p>
         <div class="actions">
-          <button class="secondary" type="button" onclick="editMember('${user.id}')">?????</button>
-          <button class="danger" type="button" onclick="deleteMember('${user.id}')">???</button>
+          <button class="secondary" type="button" onclick="editMember('${user.id}')">تعديل</button>
+          <button class="danger" type="button" onclick="deleteMember('${user.id}')">حذف</button>
         </div>
       </article>
     `;
@@ -275,7 +292,7 @@ async function renderMembers() {
 async function renderSuggestions() {
   const [users, suggestions] = await Promise.all([getAllUsers(), getAllSuggestions()]);
   if (!suggestions.length) {
-    adminSuggestions.innerHTML = '<div class="empty">?? ???? ???????? ??? ????.</div>';
+    adminSuggestions.innerHTML = '<div class="empty">لا توجد اقتراحات حتى الآن.</div>';
     return;
   }
 
@@ -285,10 +302,10 @@ async function renderSuggestions() {
     return `
       <article class="suggestion-item">
         <div class="item-head">
-          <strong>${user ? user.name : "??? ??? ?????"}</strong>
+          <strong>${user ? user.name : "عضو غير معروف"}</strong>
           <span class="badge">${new Date(item.date).toLocaleString("ar-EG")}</span>
         </div>
-        <p>@${user ? user.username : "??? ?????"}</p>
+        <p>@${user ? user.username : "مستخدم-غير-معروف"}</p>
         <p>${item.suggestion}</p>
       </article>
     `;
@@ -308,12 +325,12 @@ async function renderMemberDashboard() {
 
   state.currentUser = current;
   const sub = getSubscription(current);
-  document.getElementById("member-welcome-title").textContent = `??????? ${current.name}`;
+  document.getElementById("member-welcome-title").textContent = `مرحباً ${current.name}`;
   document.getElementById("member-start-date").textContent = formatDate(sub.startDate);
   document.getElementById("member-end-date").textContent = formatDate(sub.endDate);
-  document.getElementById("member-remaining-days").textContent = `${sub.remainingDays} ???`;
+  document.getElementById("member-remaining-days").textContent = `${sub.remainingDays} يوم`;
   const badge = document.getElementById("member-status-badge");
-  badge.textContent = sub.active ? "???" : "?????";
+  badge.textContent = sub.active ? "نشط" : "منتهي";
   badge.className = sub.active ? "badge ok" : "badge expired";
 }
 
@@ -338,13 +355,13 @@ window.editMember = async function editMember(id) {
     document.getElementById("member-password").value = user.password;
     document.getElementById("member-start").value = user.start_date;
     document.getElementById("member-duration").value = String(user.duration_months);
-    memberFormTitle.textContent = "????? ?????";
-    memberSubmit.textContent = "????? ?????";
+    memberFormTitle.textContent = "تعديل العضو";
+    memberSubmit.textContent = "حفظ التعديل";
     cancelEditButton.classList.remove("hidden");
     clearStatus(memberStatus);
     window.scrollTo({ top: 0, behavior: "smooth" });
   } catch (error) {
-    setStatus(memberStatus, error.message || "???? ????? ?????? ?????.", "error");
+    setStatus(memberStatus, error.message || "حدث خطأ أثناء تحميل بيانات العضو.", "error");
   }
 };
 
@@ -355,18 +372,18 @@ window.deleteMember = async function deleteMember(id) {
       return;
     }
 
-    if (!window.confirm(`?? ???? ??? ${user.name}?`)) {
+    if (!window.confirm(`هل تريد حذف العضو ${user.name}?`)) {
       return;
     }
 
     await deleteMemberRecord(id);
-    setStatus(memberStatus, "?? ??? ????? ?????.", "success");
+    setStatus(memberStatus, "تم حذف العضو بنجاح.", "success");
     await renderAll();
     if (state.currentUser && state.currentUser.id === id) {
       logout();
     }
   } catch (error) {
-    setStatus(memberStatus, error.message || "???? ??? ?????.", "error");
+    setStatus(memberStatus, error.message || "حدث خطأ أثناء حذف العضو.", "error");
   }
 };
 
@@ -387,7 +404,7 @@ loginForm.addEventListener("submit", async (event) => {
 
     const member = await findUserByUsername(username);
     if (!member || member.password !== password) {
-      setStatus(loginStatus, "??? ???????? ?? ???? ?????? ??? ?????.", "error");
+      setStatus(loginStatus, "اسم المستخدم أو كلمة المرور غير صحيحة.", "error");
       return;
     }
 
@@ -396,7 +413,7 @@ loginForm.addEventListener("submit", async (event) => {
     await renderMemberDashboard();
     suggestionForm.reset();
   } catch (error) {
-    setStatus(loginStatus, error.message || "??? ????? ??????.", "error");
+    setStatus(loginStatus, error.message || "حدث خطأ أثناء تسجيل الدخول.", "error");
   }
 });
 
@@ -411,7 +428,7 @@ memberForm.addEventListener("submit", async (event) => {
   try {
     const existing = await findUserByUsername(username);
     if (existing && existing.id !== id) {
-      setStatus(memberStatus, "??? ???????? ?????? ?????? ???? ???.", "error");
+      setStatus(memberStatus, "اسم المستخدم مستخدم بالفعل لعضو آخر.", "error");
       return;
     }
 
@@ -429,11 +446,11 @@ memberForm.addEventListener("submit", async (event) => {
     };
 
     await saveMember(member);
-    setStatus(memberStatus, id ? "?? ????? ????? ?????." : "??? ????? ????? ?????.", "success");
+    setStatus(memberStatus, id ? "تم تحديث العضو بنجاح." : "تم إضافة العضو بنجاح.", "success");
     resetMemberForm();
     await renderAll();
   } catch (error) {
-    setStatus(memberStatus, error.message || "???? ??? ?????? ?????.", "error");
+    setStatus(memberStatus, error.message || "حدث خطأ أثناء حفظ العضو.", "error");
   }
 });
 
@@ -442,13 +459,13 @@ suggestionForm.addEventListener("submit", async (event) => {
   clearStatus(suggestionStatus);
 
   if (!state.currentUser || state.mode !== "member") {
-    setStatus(suggestionStatus, "??? ?????? ???? ?????.", "error");
+    setStatus(suggestionStatus, "يجب تسجيل الدخول كعضو لإرسال اقتراح.", "error");
     return;
   }
 
   const text = document.getElementById("suggestion-text").value.trim();
   if (!text) {
-    setStatus(suggestionStatus, "???? ???????? ??? ???????.", "error");
+    setStatus(suggestionStatus, "يرجى كتابة الاقتراح قبل الإرسال.", "error");
     return;
   }
 
@@ -461,10 +478,10 @@ suggestionForm.addEventListener("submit", async (event) => {
     });
 
     suggestionForm.reset();
-    setStatus(suggestionStatus, "?? ????? ???????? ?????.", "success");
+    setStatus(suggestionStatus, "تم إرسال الاقتراح بنجاح.", "success");
     await renderAll();
   } catch (error) {
-    setStatus(suggestionStatus, error.message || "???? ????? ????????.", "error");
+    setStatus(suggestionStatus, error.message || "حدث خطأ أثناء إرسال الاقتراح.", "error");
   }
 });
 
@@ -486,12 +503,12 @@ exportBackupButton.addEventListener("click", async () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "????-????????-?????.json";
+    link.download = "gym-membership-backup.json";
     link.click();
     URL.revokeObjectURL(url);
-    setStatus(memberStatus, "?? ????? ?????? ?????????? ?????.", "success");
+    setStatus(memberStatus, "تم تصدير النسخة الاحتياطية بنجاح.", "success");
   } catch (error) {
-    setStatus(memberStatus, error.message || "???? ????? ?????? ??????????.", "error");
+    setStatus(memberStatus, error.message || "حدث خطأ أثناء تصدير النسخة الاحتياطية.", "error");
   }
 });
 
@@ -534,9 +551,9 @@ importBackupInput.addEventListener("change", async (event) => {
 
     resetMemberForm();
     await renderAll();
-    setStatus(memberStatus, "?? ??????? ?????? ?????????? ?????.", "success");
+    setStatus(memberStatus, "تم استيراد النسخة الاحتياطية بنجاح.", "success");
   } catch (error) {
-    setStatus(memberStatus, error.message || "??? ?????? ?????????? ??? ????.", "error");
+    setStatus(memberStatus, error.message || "تعذر استيراد النسخة الاحتياطية. تأكد من صحة الملف.", "error");
   }
 
   importBackupInput.value = "";
@@ -549,11 +566,12 @@ async function init() {
   try {
     await renderAll();
   } catch (error) {
-    setStatus(loginStatus, error.message || "??? ??????? ?????? ????????.", "error");
+    setStatus(loginStatus, error.message || "تعذر تحميل بيانات النظام.", "error");
   }
 }
 
 init();
+
 
 
 
